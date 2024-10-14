@@ -2,7 +2,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 import numpy as np
 import matplotlib.pyplot as plt
-from .terrain import generate_reference_and_limits
+import pandas as pd
+import random
+from terrain import generate_reference_and_limits
 
 class Submarine:
     def __init__(self):
@@ -62,6 +64,13 @@ class Trajectory:
         plt.legend(loc='upper right')
         plt.show()
 
+# Instructions: Part 3
+# Modify the Mission class, adding a method that returns an instance of the Mission class
+# by extracting data from the mission.csv file. 
+# Before you start modifying your codebase, ensure that you are working on a new branch
+# remember to make sufficiently regular commits
+# use pandas package
+
 @dataclass
 class Mission:
     reference: np.ndarray
@@ -75,8 +84,15 @@ class Mission:
 
     @classmethod
     def from_csv(cls, file_name: str):
-        # You are required to implement this method
-        pass
+        # Part 3
+        # get the whole cave profile
+        # create a large dataframe from mission.csv
+        df = pd.read_csv(file_name)
+        # extract the reference from csv (first column) 
+        reference = df.iloc[:, 0].to_numpy()
+        cave_height = df.iloc[:, 1].to_numpy()
+        cave_depth = df.iloc[:, 2].to_numpy()
+        return cls(reference, cave_height, cave_depth)
 
 
 class ClosedLoop:
@@ -97,7 +113,8 @@ class ClosedLoop:
         for t in range(T):
             positions[t] = self.plant.get_position()
             observation_t = self.plant.get_depth()
-            # Call your controller here
+            # Part 4: Get Control Action from controller
+            actions[t] = self.controller.get_controlaction(mission.reference, positions, t)
             self.plant.transition(actions[t], disturbances[t])
 
         return Trajectory(positions)
