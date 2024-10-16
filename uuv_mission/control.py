@@ -11,9 +11,11 @@ class controller:
         cave_depth_curr = positions[t,1]
         cave_depth_prev = positions[t-1,1]
 
+        print(reference)
+
         # e = error = r - y
-        e = reference(t) - cave_depth_curr
-        e_prev = reference(t-1) - cave_depth_prev
+        e = reference[t] - cave_depth_curr
+        e_prev = reference[t-1] - cave_depth_prev
 
         # pd feedback controller
         # ut: u(t) = control action
