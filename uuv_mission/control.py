@@ -1,17 +1,17 @@
 # submarine controller
 class controller:
 
-    def get_controlaction(cls, reference, positions, t):
+    # created such that it is easy to change gains from the jupyter notebook
+    def __init__(self, kp, kd):
         # kp = proportional gains
-        kp = 0.15
         # kd = derivative gains
-        kd = 0.6
+        self.kp = kp
+        self.kd = kd
 
+    def get_controlaction(self, reference, positions, t):
         # get cave_depth current and prev
         cave_depth_curr = positions[t,1]
         cave_depth_prev = positions[t-1,1]
-
-        print(reference)
 
         # e = error = r - y
         e = reference[t] - cave_depth_curr
@@ -19,5 +19,5 @@ class controller:
 
         # pd feedback controller
         # ut: u(t) = control action
-        ut = kp * e + kd* (e - e_prev)
+        ut = self.kp * e + self.kd* (e - e_prev)
         return ut
