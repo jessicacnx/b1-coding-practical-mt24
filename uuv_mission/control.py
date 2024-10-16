@@ -1,10 +1,19 @@
 # submarine controller
-class controller:
+class Controller:
 
-    # created such that it is easy to change gains from the jupyter notebook
+    '''
+    A Class to Represent a the Control System of A Submarine
+    
+    Attributes:
+    kp = proportional gains (int)
+    kd = derivative gains (int)
+    
+    Outputs:
+    ut = appropriate next action for the submarine
+    '''
+
+    # user friendly: easy to change gains from the jupyter notebook
     def __init__(self, kp, kd):
-        # kp = proportional gains
-        # kd = derivative gains
         self.kp = kp
         self.kd = kd
 
@@ -13,7 +22,7 @@ class controller:
         cave_depth_curr = positions[t,1]
         cave_depth_prev = positions[t-1,1]
 
-        # e = error = r - y
+        # e = error = r(reference) - y(current and past position)
         e = reference[t] - cave_depth_curr
         e_prev = reference[t-1] - cave_depth_prev
 
